@@ -3,7 +3,7 @@ name: Scheduled Selenium Tests
 on:
   push:
     branches:
-      - origin
+      - main
   workflow_dispatch:
     {}
 
