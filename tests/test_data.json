@@ -1,0 +1,19 @@
+{
+  "login": {
+    "email": "testuserartiom@example.com",
+    "password": "Password123!"
+  },
+  "address": {
+    "name": "Artiom Garbul",
+    "street": "123 Testing St",
+    "country": "Andorra"
+  },
+  "order": {
+    "payment": "Check / Money Order",
+    "shipping": "Ground"
+  },
+  "items": [
+    "Build your own computer",
+    "Build your own expensive computer"
+  ]
+}
