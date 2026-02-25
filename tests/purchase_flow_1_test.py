@@ -86,7 +86,9 @@ def test_purchase_flow_1():
 
         # Verify added products
         wait.until(EC.presence_of_element_located((By.CLASS_NAME,"shopping-cart-page")))
-        wait.until(lambda d:len(d.find_elements(By.CSS_SELECTOR,"tr.cart-item-row"))>=2)
+        table=wait.until(EC.presence_of_element_located((By.CLASS_NAME,"cart")))
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});",table)
+        wait.until(lambda d:(len(d.find_elements(By.CSS_SELECTOR,"tr.cart-item-row"))>=2))
 
         cart_rows=driver.find_elements(By.CSS_SELECTOR,"tr.cart-item-row")
 

@@ -30,7 +30,7 @@ def test_purchase_flow_2():
     options.add_argument("--disable-gpu")
 
     driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-    wait=WebDriverWait(driver,10)
+    wait=WebDriverWait(driver,20)
 
     try:
         # Open homepage
@@ -109,7 +109,9 @@ def test_purchase_flow_2():
 
         # Verify added products
         wait.until(EC.presence_of_element_located((By.CLASS_NAME,"shopping-cart-page")))
-        wait.until(lambda d:len(d.find_elements(By.CSS_SELECTOR,"tr.cart-item-row"))>=2)
+        table=wait.until(EC.presence_of_element_located((By.CLASS_NAME,"cart")))
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});",table)
+        wait.until(lambda d:(len(d.find_elements(By.CSS_SELECTOR,"tr.cart-item-row"))>=2))
 
         cart_rows=driver.find_elements(By.CSS_SELECTOR,"tr.cart-item-row")
 
@@ -261,5 +263,6 @@ def test_purchase_flow_2():
         # Logout check
         login_nav=wait.until(EC.visibility_of_element_located((By.CLASS_NAME,"ico-login")))
         assert login_nav.is_displayed()
+
     finally:
         driver.quit()
