@@ -66,9 +66,11 @@ def test_purchase_flow_2():
             driver.find_element(By.NAME,"updatecart").click()
 
         # Go to Computers -> Desktops category
+        wait.until(EC.presence_of_element_located((By.XPATH,"//a[normalize-space()='Computers']")))
         computers_nav=wait.until(EC.element_to_be_clickable((By.XPATH,"//a[normalize-space()='Computers']")))
         computers_nav.click()
 
+        wait.until(EC.presence_of_element_located((By.XPATH,"//h2[@class='title']/a[normalize-space()='Desktops']")))
         desktops_nav=wait.until(EC.element_to_be_clickable((By.XPATH,"//h2[@class='title']/a[normalize-space()='Desktops']")))
         desktops_nav.click()
 
@@ -83,11 +85,15 @@ def test_purchase_flow_2():
         build_pc_hdd_select.click()
         add_to_cart=wait.until(EC.element_to_be_clickable((By.ID,"add-to-cart-button-16")))
         add_to_cart.click()
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,".bar-notification.success")))
+        wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR,".bar-notification.success")))
 
         # Go to Computers -> Desktops category
+        wait.until(EC.presence_of_element_located((By.XPATH,"//a[normalize-space()='Computers']")))
         computers_nav=wait.until(EC.element_to_be_clickable((By.XPATH,"//a[normalize-space()='Computers']")))
         computers_nav.click()
 
+        wait.until(EC.presence_of_element_located((By.XPATH,"//h2[@class='title']/a[normalize-space()='Desktops']")))
         desktops_nav=wait.until(EC.element_to_be_clickable((By.XPATH,"//h2[@class='title']/a[normalize-space()='Desktops']")))
         desktops_nav.click()
 
@@ -96,12 +102,12 @@ def test_purchase_flow_2():
         wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,".product-grid .item-box")))
 
         # Selecting Build your own expensive computer
-        build_pc=wait.until(EC.element_to_be_clickable((
-            By.XPATH,"//h2[@class='product-title']/a[normalize-space()='Build your own expensive computer']"
-        )))
+        build_pc=wait.until(EC.element_to_be_clickable((By.XPATH,"//h2[@class='product-title']/a[normalize-space()='Build your own expensive computer']")))
         build_pc.click()
         add_to_cart=wait.until(EC.element_to_be_clickable((By.ID,"add-to-cart-button-74")))
         add_to_cart.click()
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,".bar-notification.success")))
+        wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR,".bar-notification.success")))
 
         # Go to shopping cart
         add_to_cart=wait.until(EC.element_to_be_clickable((By.CLASS_NAME,"ico-cart")))
