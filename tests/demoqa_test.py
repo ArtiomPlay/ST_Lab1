@@ -23,9 +23,9 @@ def test_demoqa_1():
     wait=WebDriverWait(driver,10)
 
     def add_element(number):
-        driver.execute_script("window.scrollTo(0,0);")
-
         add_btn=wait.until(EC.visibility_of_element_located((By.ID,"addNewRecordButton")))
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});",add_btn)
+        time.sleep(0.2)
         add_btn.click()
 
         first_name_field=wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,"#firstName.form-control")))
@@ -102,10 +102,6 @@ def test_demoqa_1():
         # Ensure pagination return to 1 page and that page number reduced to 1
         assert get_current_page()==1,"Did not return to page 1 after deleting page 2 items"
         assert get_page_count()==1,"There should be only 1 page left"
-
-    except Exception as e:
-        driver.save_screenshot("error.png")
-        raise
 
     finally:
         driver.quit()
