@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os,json
@@ -22,7 +23,13 @@ shipping=data["order"]["shipping"]
 items=data["items"]
 
 def test_purchase_flow_2():
-    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    options=Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
     wait=WebDriverWait(driver,10)
 
     try:
@@ -101,6 +108,7 @@ def test_purchase_flow_2():
         add_to_cart.click()
 
         # Verify added products
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME,"shopping-cart-page")))
         wait.until(lambda d:len(d.find_elements(By.CSS_SELECTOR,"tr.cart-item-row"))>=2)
 
         cart_rows=driver.find_elements(By.CSS_SELECTOR,"tr.cart-item-row")

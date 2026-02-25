@@ -1,18 +1,22 @@
-import time
-from tokenize import String
-
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def test_dynamic_properties_1():
-    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.maximize_window()
+    options=Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
     wait=WebDriverWait(driver,20)
 
     try:
@@ -21,11 +25,11 @@ def test_dynamic_properties_1():
         assert "demosit" in driver.title
 
         # Select Elements
-        elements_btn=wait.until(EC.element_to_be_clickable((By.XPATH,"//h5[text()='Elements']/ancestor::a")))
+        elements_btn=wait.until(EC.presence_of_element_located((By.XPATH,"//h5[text()='Elements']/ancestor::a")))
         ActionChains(driver).click(elements_btn).perform()
 
         # Select Dynamic Properties
-        elements_btn=wait.until(EC.element_to_be_clickable((By.XPATH,"//span[text()='Dynamic Properties']")))
+        elements_btn=wait.until(EC.presence_of_element_located((By.XPATH,"//span[text()='Dynamic Properties']")))
         elements_scroll_origin=ScrollOrigin.from_element(elements_btn)
         ActionChains(driver).scroll_from_origin(elements_scroll_origin,0,200).pause(1).click(elements_btn).perform()
 
@@ -43,6 +47,6 @@ def test_dynamic_properties_1():
         # Check that button “Visible After 5 Seconds” is visible
         visible_after=wait.until(EC.visibility_of_element_located((By.ID,"visibleAfter")))
         assert visible_after.is_displayed()
-        
+
     finally:
         driver.quit()

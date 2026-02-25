@@ -3,7 +3,7 @@ name: Scheduled Selenium Tests
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
     {}
 
@@ -22,11 +22,8 @@ jobs:
 
       - name: Install Google Chrome
         run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-
-      - name: Install ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
 
       - name: Install dependencies
         run: |

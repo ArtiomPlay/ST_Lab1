@@ -4,11 +4,18 @@ from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def test_progress_bar_1():
-    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    options=Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
     driver.maximize_window()
     wait=WebDriverWait(driver,10)
 

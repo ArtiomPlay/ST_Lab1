@@ -1,20 +1,31 @@
 import time
-from tokenize import String
 
 from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def test_demoqa_1():
-    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    options=Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
     driver.maximize_window()
     wait=WebDriverWait(driver,10)
 
     def add_element(number):
-        add_btn=wait.until(EC.element_to_be_clickable((By.ID,"addNewRecordButton")))
+        driver.execute_script("window.scrollTo(0,0);")
+
+        add_btn=wait.until(EC.visibility_of_element_located((By.ID,"addNewRecordButton")))
         add_btn.click()
 
         first_name_field=wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,"#firstName.form-control")))
@@ -54,10 +65,11 @@ def test_demoqa_1():
 
         # Select Elements
         elements_btn=wait.until(EC.element_to_be_clickable((By.XPATH,"//h5[text()='Elements']/ancestor::a")))
-        elements_btn.click()
+        elements_scroll_origin=ScrollOrigin.from_element(elements_btn)
+        ActionChains(driver).scroll_from_origin(elements_scroll_origin,0,200).pause(1).click(elements_btn).perform()
 
         # Select Web Tables
-        elements_btn=wait.until(EC.element_to_be_clickable((By.XPATH,"//span[text()='Web Tables']/ancestor::a")))
+        elements_btn=wait.until(EC.presence_of_element_located((By.XPATH,"//span[text()='Web Tables']/ancestor::a")))
         elements_btn.click()
 
         # Add elements
@@ -90,6 +102,10 @@ def test_demoqa_1():
         # Ensure pagination return to 1 page and that page number reduced to 1
         assert get_current_page()==1,"Did not return to page 1 after deleting page 2 items"
         assert get_page_count()==1,"There should be only 1 page left"
+
+    except Exception as e:
+        driver.save_screenshot("error.png")
+        raise
 
     finally:
         driver.quit()
